@@ -126,15 +126,17 @@ function fazerLogin(){
     return;
   }
 
-  const loginAtual = localStorage.getItem("teste_usado");
+  // PEGAR TODOS OS LOGINS QUE JÁ USARAM O TESTE
+  let usados = JSON.parse(localStorage.getItem("testes_usados") || "[]");
 
-  if(loginAtual === l){
-    document.getElementById("loginMsg").innerText="Este login já utilizou o teste neste navegador.";
+  if(usados.includes(l)){
+    document.getElementById("loginMsg").innerText="Este login já utilizou o teste, não pode repetir.";
     return;
   }
 
-  // Se for login diferente, libera teste
-  localStorage.setItem("teste_usado", l);
+  // ADICIONAR LOGIN ATUAL AOS USADOS
+  usados.push(l);
+  localStorage.setItem("testes_usados", JSON.stringify(usados));
 
   // Resetar todos os contadores e histórico
   greens = 0; losses = 0; brancos = 0; totalSinais = 0;
@@ -166,7 +168,7 @@ let seq=[];
 
 /* ===== CLIQUE ===== */
 function add(c){
-  if(localStorage.getItem("teste_usado")===null){
+  if(localStorage.getItem("testes_usados")===null){
     result.innerHTML="❌ FAÇA LOGIN PARA COMEÇAR";
     return;
   }
@@ -214,7 +216,6 @@ function analisar(){
     {p:"WB",s:"B"}
   ];
 
-  // checar padrões de 3 sinais
   for(let p of padroes){
     if(ult3===p.p){
       sinal = p.inv ? (p.s==="R"?"B":"R") : p.s;
@@ -225,7 +226,6 @@ function analisar(){
     }
   }
 
-  // checar padrões de 2 sinais
   for(let p of padroes2){
     if(ult2===p.p){
       sinal = p.s;
@@ -293,3 +293,4 @@ setInterval(atualizarHora,1000); atualizarHora();
 </script>
 </body>
 </html>
+  
