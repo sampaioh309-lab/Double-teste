@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SISTEMA I.A - Double Blaze</title>
+
+<style>
+*{box-sizing:border-box}
+html,body{width:100%;height:100%;margin:0}
+body{background:#020617;font-family:Arial,sans-serif;color:#e5e7eb;overflow:hidden}
+canvas{position:fixed;inset:0;z-index:0}
+#statsText{position:fixed;top:5px;left:6px;font-size:10px;color:#00ff88;z-index:999;}
+#app{position:relative;z-index:1;max-width:420px;height:100vh;margin:auto;padding:6px;display:flex;flex-direction:column;gap:6px;text-align:center;}
+.titulo{font-size:20px;font-weight:900;color:#ff0033}
+.versao{font-size:13px;font-weight:900;color:#ff0033;margin-top:-4px}
+.blue-neon{text-shadow:0 0 6px #3b82f6}
+#hora{font-size:12px}
+#placar{display:flex;justify-content:space-between;font-size:11px;}
+.green-neon{color:#22c55e}
+.red-neon{color:#ef4444}
+.white-neon{color:#facc15}
+#linha{display:flex;gap:4px;overflow-x:auto;font-size:16px;padding:4px;}
+#linha::-webkit-scrollbar{display:none}
+#botoes{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
+button{padding:6px;font-size:11px;font-weight:bold;border:none;border-radius:8px;}
+.red{background:#7f1d1d;color:#fff}
+.black{background:#020617;color:#fff;border:1px solid #555}
+.white{background:#fff;color:#020617}
+#result{min-height:40px;font-size:13px;font-weight:bold;text-align:center;}
+#modalBranco{position:fixed;bottom:10px;right:10px;background:rgba(2,6,23,0.95);border:1px solid #facc15;box-shadow:0 0 8px #facc15;padding:6px 8px;border-radius:8px;width:120px;font-size:11px;text-align:center;z-index:99;display:none;}
+#modalBranco h3{margin:0 0 4px 0;font-size:10px;color:#facc15;}
+#modalBranco p{margin:2px 0;font-size:12px;font-weight:bold;color:#ffffff;}
+.green-chamativo{font-size:32px;font-weight:900;color:#00ff55;text-shadow:0 0 15px #00ff55,0 0 30px #00ff55,0 0 50px #00ff55;}
+.green-branco-chamativo{font-size:32px;font-weight:900;color:#00ffcc;text-shadow:0 0 15px #00ffcc,0 0 30px #00ffcc,0 0 50px #00ffcc;}
+
+#loginBox{
+position:fixed; inset:0; background:#020617; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999; gap:10px;
+}
+#loginBox input{padding:10px;border-radius:6px;border:none;width:220px;}
+#loginBox button{padding:10px;background:#22c55e;color:white;font-weight:bold;}
+</style>
+</head>
+
+<body>
+
+<div id="loginBox">
+<h2>LOGIN TESTE</h2>
+<input id="login" placeholder="Login">
+<input id="senha" placeholder="Senha" type="password">
+<button onclick="fazerLogin()">Entrar</button>
+<p id="loginMsg"></p>
+</div>
+
+<div id="statsText">Sinais: <span id="totalSinais">0</span> | Assert: <span id="percentual">0%</span></div>
+<canvas id="matrix"></canvas>
+
+<div id="app">
+<div>
+<div class="titulo">SISTEMA I.A</div>
+<div class="versao">V:9.60 MOBILE</div>
+<div id="hora" class="blue-neon">🕒 --:--:--</div>
+</div>
+
+<div id="placar">
+<span class="green-neon">GREEN <b id="greens">0</b></span>
+<span class="red-neon">LOSS <b id="losses">0</b></span>
+<span class="white-neon">BRANCO <b id="brancos">0</b></span>
+</div>
+
+<div id="linha"></div>
+
+<div id="botoes">
+<button class="red" onclick="add('R')">🔴</button>
+<button class="black" onclick="add('B')">⚫</button>
+<button class="white" onclick="add('W')">⚪</button>
+</div>
+
+<div id="result">⏸️ AGUARDAR</div>
+</div>
+
+<div id="modalBranco"></div>
+
+<script>
+/* ===== MATRIX ===== */
+const canvas=document.getElementById("matrix");
+const ctx=canvas.getContext("2d");
+function resize(){canvas.width=innerWidth; canvas.height=innerHeight;}
+resize(); window.onresize=resize;
+const letters="01アイウエオ";
+const fontSize=14;
+let drops=Array(Math.floor(innerWidth/fontSize)).fill(1);
+function drawMatrix(){
+ctx.fillStyle="rgba(2,6,23,0.35)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+ctx.fillStyle="#ff0033"; ctx.font=fontSize+"px monospace";
+for(let i=0;i<drops.length;i++){
+const text=letters[Math.floor(Math.random()*letters.length)];
+ctx.fillText(text,i*fontSize,drops[i]*fontSize);
+if(drops[i]*fontSize>canvas.height && Math.random()>0.975) drops[i]=0;
+drops[i]++;
+}
+}
+setInterval(drawMatrix,50);
+
+/* ===== LISTA DE USUÁRIOS ===== */
+const usuarios = {
+"cliente01":"Bz#91LmQ","cliente02":"Xp#44KdT","cliente03":"Hs#72QwA","cliente04":"Zk#33LmP","cliente05":"Rf#91TaL",
+"cliente06":"Vx#62WqE","cliente07":"Qa#87LpN","cliente08":"Pw#19ZtS","cliente09":"Ks#52RtM","cliente10":"Mx#73LpV",
+"cliente11":"Gt#42QwZ","cliente12":"Tb#91LpK","cliente13":"Jx#64RtP","cliente14":"Wp#83LmQ","cliente15":"Hk#57QaZ",
+"cliente16":"Lx#49WqR","cliente17":"Pm#61RtV","cliente18":"Dq#72LpZ","cliente19":"Uz#84QwT","cliente20":"Vb#51RtM",
+"cliente21":"Fa#73LpX","cliente22":"Xr#64QaT","cliente23":"Zm#58WqL","cliente24":"Qp#92RtK","cliente25":"Lf#33LpW",
+"cliente26":"Mp#41QaR","cliente27":"Vr#76WqZ","cliente28":"Gx#84RtQ","cliente29":"Hq#59LpE","cliente30":"Ns#72QaM",
+"cliente31":"Bp#94WqT","cliente32":"Kr#65RtZ","cliente33":"Tm#43LpQ","cliente34":"Zx#81QaP","cliente35":"Qr#56WqV",
+"cliente36":"Xs#70RtL","cliente37":"Wm#69LpA","cliente38":"Gp#52QaE","cliente39":"Kx#73WqR","cliente40":"Db#61RtZ",
+"cliente41":"Jp#83LpS","cliente42":"Lr#94QaT","cliente43":"Fm#62WqE","cliente44":"Nx#75RtP","cliente45":"Qb#41LpM",
+"cliente46":"Hs#58QaV","usuario47":"Mp#67WqK","cliente48":"Tz#89RtW","cliente49":"Px#53LpR","cliente50":"Zq#74QaX"
+};
+
+/* ===== LOGIN ===== */
+function fazerLogin(){
+  let l=document.getElementById("login").value;
+  let s=document.getElementById("senha").value;
+
+  if(!usuarios[l] || usuarios[l]!==s){
+    document.getElementById("loginMsg").innerText="Login ou senha inválidos";
+    return;
+  }
+
+  const loginAtual = localStorage.getItem("teste_usado");
+
+  if(loginAtual === l){
+    document.getElementById("loginMsg").innerText="Este login já utilizou o teste neste navegador.";
+    return;
+  }
+
+  // Se for login diferente, libera teste
+  localStorage.setItem("teste_usado", l);
+
+  // Resetar todos os contadores e histórico
+  greens = 0; losses = 0; brancos = 0; totalSinais = 0;
+  seq = []; sinal = null; gale = 0; textoSinal = "";
+  possiveisBrancos = [];
+  linha.innerHTML = "";
+  result.innerHTML = "⏸️ AGUARDAR";
+  atualizar(); atualizarStats();
+
+  document.getElementById("loginBox").style.display="none";
+  document.getElementById("loginMsg").innerText="";
+}
+
+/* ===== SISTEMA ===== */
+const linha=document.getElementById("linha");
+const result=document.getElementById("result");
+const greensEl=document.getElementById("greens");
+const lossesEl=document.getElementById("losses");
+const brancosEl=document.getElementById("brancos");
+const modalBranco=document.getElementById("modalBranco");
+
+let sinal=null, gale=0;
+let greens=0, losses=0, brancos=0;
+let totalSinais=0;
+let textoSinal="";
+let possiveisBrancos=[];
+let limiteGreensTeste=10;
+let seq=[];
+
+/* ===== CLIQUE ===== */
+function add(c){
+  if(localStorage.getItem("teste_usado")===null){
+    result.innerHTML="❌ FAÇA LOGIN PARA COMEÇAR";
+    return;
+  }
+
+  if(greens>=limiteGreensTeste){
+    result.innerHTML="<div class='green-chamativo'>✅ TESTE FINALIZADO - 10 GREENS</div>";
+    return;
+  }
+
+  seq.push(c);
+  const el=document.createElement("span");
+  el.innerText=c==="R"?"🔴":c==="B"?"⚫":"⚪";
+  linha.appendChild(el); linha.scrollLeft=linha.scrollWidth;
+
+  if(c==="W"){
+    verificarGreenBranco();
+    if(sinal){
+      greens++; brancos++; atualizar(); atualizarStats();
+      result.innerHTML="<div class='green-branco-chamativo'>⚪🟢 GREEN BRANCO (PROTEÇÃO)</div>";
+      resetar();
+    }
+    gerarPossiveisBrancos();
+    return;
+  }
+
+  sinal ? validar(c) : analisar();
+}
+
+/* ===== ESTRATÉGIAS ===== */
+function analisar(){
+  let ult3 = seq.slice(-3).join("");
+  let ult2 = seq.slice(-2).join("");
+
+  const padroes=[
+    {p:"RRB",s:"R",inv:false},
+    {p:"RBR",s:"R",inv:true},
+    {p:"BRR",s:"B",inv:false},
+    {p:"BBR",s:"B",inv:true},
+    {p:"BRB",s:"B",inv:false},
+    {p:"RBB",s:"R",inv:true}
+  ];
+
+  const padroes2=[
+    {p:"WR",s:"R"},
+    {p:"WB",s:"B"}
+  ];
+
+  // checar padrões de 3 sinais
+  for(let p of padroes){
+    if(ult3===p.p){
+      sinal = p.inv ? (p.s==="R"?"B":"R") : p.s;
+      totalSinais++; atualizarStats();
+      textoSinal=`📡 SINAL I.A<br>Apostar no ${sinal==="R"?"🔴":"⚫"}<br>♻️ Até G1<br>⚪ Proteção Branco`;
+      result.innerHTML=textoSinal;
+      return;
+    }
+  }
+
+  // checar padrões de 2 sinais
+  for(let p of padroes2){
+    if(ult2===p.p){
+      sinal = p.s;
+      totalSinais++; atualizarStats();
+      textoSinal=`📡 SINAL I.A<br>Apostar no ${sinal==="R"?"🔴":"⚫"}<br>♻️ Até G1<br>⚪ Proteção Branco`;
+      result.innerHTML=textoSinal;
+      return;
+    }
+  }
+}
+
+function validar(c){
+  if(c===sinal){
+    greens++; atualizar(); atualizarStats();
+    result.innerHTML="<div class='green-chamativo'>🟢 GREEN</div>";
+    resetar();
+  }else{
+    if(gale===0){ gale=1; result.innerHTML=textoSinal+"<br>♻️ ENTRAR G1"; }
+    else{ losses++; atualizar(); atualizarStats(); result.innerHTML="❌ LOSS"; resetar(); }
+  }
+}
+
+/* ===== POSSÍVEIS BRANCOS ===== */
+function gerarPossiveisBrancos(){
+  let base=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Sao_Paulo"}));
+  base.setMinutes(base.getMinutes()+5);
+  possiveisBrancos=[];
+  let html="<h3>⚪ POSSÍVEIS</h3>";
+  for(let i=0;i<4;i++){
+    if(i>0) base.setMinutes(base.getMinutes()+3);
+    let hora=Number(base.getHours());
+    let minuto=Number(base.getMinutes());
+    possiveisBrancos.push({hora:minhaHora(hora), minuto:minhaHora(minuto)});
+    html+=`<p>${hora.toString().padStart(2,"0")}:${minuto.toString().padStart(2,"0")}</p>`;
+  }
+  modalBranco.innerHTML=html;
+  modalBranco.style.display="block";
+}
+
+function minhaHora(n){ return n<0?0:n; }
+
+/* ===== GREEN BRANCO ===== */
+function verificarGreenBranco(){
+  const agora=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Sao_Paulo"}));
+  const minutoAtual = agora.getHours()*60 + agora.getMinutes();
+  for(let b of possiveisBrancos){
+    const centro = b.hora*60 + b.minuto;
+    if(Math.abs(minutoAtual - centro) <= 1){
+      greens++; brancos++; atualizar(); atualizarStats();
+      result.innerHTML="<div class='green-branco-chamativo'>⚪🟢 GREEN BRANCO</div>";
+      possiveisBrancos=[];
+      gerarPossiveisBrancos();
+      return true;
+    }
+  }
+  return false;
+}
+
+/* ===== AUX ===== */
+function atualizar(){greensEl.innerText=greens; lossesEl.innerText=losses; brancosEl.innerText=brancos;}
+function atualizarStats(){document.getElementById("totalSinais").innerText=totalSinais; let p=totalSinais>0?((greens/totalSinais)*100).toFixed(1):0; document.getElementById("percentual").innerText=p+"%";}
+function resetar(){setTimeout(()=>{sinal=null; gale=0; textoSinal=""; result.innerHTML="⏸️ AGUARDAR";},1200);}
+function atualizarHora(){const b=new Date(new Date().toLocaleString("en-US",{timeZone:"America/Sao_Paulo"})); document.getElementById("hora").innerText=`🕒 ${b.toLocaleTimeString("pt-BR")} (Brasília)`;}
+setInterval(atualizarHora,1000); atualizarHora();
+</script>
+</body>
+  </html>
