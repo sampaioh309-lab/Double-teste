@@ -9,36 +9,47 @@
 *{box-sizing:border-box}
 html,body{width:100%;height:100%;margin:0}
 body{background:#020617;font-family:Arial,sans-serif;color:#e5e7eb;overflow:hidden}
-canvas{position:fixed;inset:0;z-index:0}
-#statsText{position:fixed;top:5px;left:6px;font-size:10px;color:#00ff88;z-index:999;}
-#app{position:relative;z-index:1;max-width:420px;height:100vh;margin:auto;padding:6px;display:flex;flex-direction:column;gap:6px;text-align:center;}
-.titulo{font-size:20px;font-weight:900;color:#ff0033}
-.versao{font-size:13px;font-weight:900;color:#ff0033;margin-top:-4px}
-.blue-neon{text-shadow:0 0 6px #3b82f6}
-#hora{font-size:12px}
-#placar{display:flex;justify-content:space-between;font-size:11px;}
-.green-neon{color:#22c55e}
-.red-neon{color:#ef4444}
-.white-neon{color:#facc15}
-#linha{display:flex;gap:4px;overflow-x:auto;font-size:16px;padding:4px;}
-#linha::-webkit-scrollbar{display:none}
-#botoes{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
-button{padding:6px;font-size:11px;font-weight:bold;border:none;border-radius:8px;}
-.red{background:#7f1d1d;color:#fff}
-.black{background:#020617;color:#fff;border:1px solid #555}
-.white{background:#fff;color:#020617}
-#result{min-height:40px;font-size:13px;font-weight:bold;text-align:center;}
-#modalBranco{position:fixed;bottom:10px;right:10px;background:rgba(2,6,23,0.95);border:1px solid #facc15;box-shadow:0 0 8px #facc15;padding:6px 8px;border-radius:8px;width:120px;font-size:11px;text-align:center;z-index:99;display:none;}
-#modalBranco h3{margin:0 0 4px 0;font-size:10px;color:#facc15;}
-#modalBranco p{margin:2px 0;font-size:12px;font-weight:bold;color:#ffffff;}
-.green-chamativo{font-size:32px;font-weight:900;color:#00ff55;text-shadow:0 0 15px #00ff55,0 0 30px #00ff55,0 0 50px #00ff55;}
-.green-branco-chamativo{font-size:32px;font-weight:900;color:#00ffcc;text-shadow:0 0 15px #00ffcc,0 0 30px #00ffcc,0 0 50px #00ffcc;}
 
 #loginBox{
-position:fixed; inset:0; background:#020617; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999; gap:10px;
+position:fixed;
+inset:0;
+background:#020617;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
+z-index:9999;
+gap:10px;
 }
-#loginBox input{padding:10px;border-radius:6px;border:none;width:220px;}
-#loginBox button{padding:10px;background:#22c55e;color:white;font-weight:bold;}
+
+#loginBox input{
+padding:10px;
+border-radius:6px;
+border:none;
+width:220px;
+}
+
+#loginBox button{
+padding:10px;
+background:#22c55e;
+color:white;
+font-weight:bold;
+}
+
+#app{
+max-width:420px;
+margin:auto;
+padding:10px;
+display:flex;
+flex-direction:column;
+gap:10px;
+text-align:center;
+}
+
+button{
+padding:8px;
+font-size:16px;
+}
 </style>
 </head>
 
@@ -52,34 +63,29 @@ position:fixed; inset:0; background:#020617; display:flex; flex-direction:column
 <p id="loginMsg"></p>
 </div>
 
-<div id="statsText">Sinais: <span id="totalSinais">0</span> | Assert: <span id="percentual">0%</span></div>
-<canvas id="matrix"></canvas>
-
 <div id="app">
-<div>
-<div class="titulo">SISTEMA I.A</div>
-<div class="versao">V:9.60 MOBILE</div>
-<div id="hora" class="blue-neon">🕒 --:--:--</div>
-</div>
 
-<div id="placar">
-<span class="green-neon">GREEN <b id="greens">0</b></span>
-<span class="red-neon">LOSS <b id="losses">0</b></span>
-<span class="white-neon">BRANCO <b id="brancos">0</b></span>
+<h2>SISTEMA I.A</h2>
+
+<div>
+GREEN <b id="greens">0</b> |
+LOSS <b id="losses">0</b> |
+BRANCO <b id="brancos">0</b>
 </div>
 
 <div id="linha"></div>
 
-<div id="botoes">
-<button class="red" onclick="add('R')">🔴</button>
-<button class="black" onclick="add('B')">⚫</button>
-<button class="white" onclick="add('W')">⚪</button>
+<div>
+
+<button onclick="add('R')">🔴</button>
+<button onclick="add('B')">⚫</button>
+<button onclick="add('W')">⚪</button>
+
 </div>
 
 <div id="result">⏸️ AGUARDAR</div>
-</div>
 
-<div id="modalBranco"></div>
+</div>
 
 <script>
 
@@ -87,46 +93,125 @@ position:fixed; inset:0; background:#020617; display:flex; flex-direction:column
 
 const usuarios = {
 
-"cliente01":"Ax#73LpQ","cliente02":"Br#52WqT","cliente03":"Cm#84RtL","cliente04":"Dn#61QaP","cliente05":"Ep#79WqR",
-"cliente06":"Fq#48LpZ","cliente07":"Gr#92QaK","cliente08":"Hs#57RtM","cliente09":"It#63LpV","cliente10":"Ju#74WqX",
-"cliente11":"Kv#51QaL","cliente12":"Lw#89RtP","cliente13":"Mx#67LpR","cliente14":"Ny#42WqT","cliente15":"Oz#95QaM",
-"cliente16":"Pa#58RtK","cliente17":"Qb#73LpX","cliente18":"Rc#64WqV","cliente19":"Sd#91QaL","cliente20":"Te#47RtP",
-"cliente21":"Uf#82LpR","cliente22":"Vg#59WqX","cliente23":"Wh#76QaT","cliente24":"Xi#63RtM","cliente25":"Yj#88LpK",
-"cliente26":"Zk#54WqQ","cliente27":"Al#97QaV","cliente28":"Bm#62RtZ","cliente29":"Cn#71LpP","cliente30":"Do#46WqR",
-"cliente31":"Ep#83QaX","cliente32":"Fq#69RtM","cliente33":"Gr#58LpV","cliente34":"Hs#92WqT","cliente35":"It#73QaP",
-"cliente36":"Ju#61RtK","cliente37":"Kv#87LpR","cliente38":"Lw#52WqX","cliente39":"Mx#79QaM","cliente40":"Ny#64RtL",
-"cliente41":"Oz#91LpZ","cliente42":"Pa#48WqT","cliente43":"Qb#76QaK","cliente44":"Rc#57RtM","cliente45":"Sd#83LpX",
-"cliente46":"Te#69WqV","cliente47":"Uf#95QaP","cliente48":"Vg#54RtR","cliente49":"Wh#72LpQ","cliente50":"Xi#66WqM"
+"cliente01":"Ax73LpQ",
+"cliente02":"Br52WqT",
+"cliente03":"Cm84RtL",
+"cliente04":"Dn61QaP",
+"cliente05":"Ep79WqR",
+"cliente06":"Fq48LpZ",
+"cliente07":"Gr92QaK",
+"cliente08":"Hs57RtM",
+"cliente09":"It63LpV",
+"cliente10":"Ju74WqX",
+"cliente11":"Kv51QaL",
+"cliente12":"Lw89RtP",
+"cliente13":"Mx67LpR",
+"cliente14":"Ny42WqT",
+"cliente15":"Oz95QaM",
+"cliente16":"Pa58RtK",
+"cliente17":"Qb73LpX",
+"cliente18":"Rc64WqV",
+"cliente19":"Sd91QaL",
+"cliente20":"Te47RtP",
+"cliente21":"Uf82LpR",
+"cliente22":"Vg59WqX",
+"cliente23":"Wh76QaT",
+"cliente24":"Xi63RtM",
+"cliente25":"Yj88LpK",
+"cliente26":"Zk54WqQ",
+"cliente27":"Al97QaV",
+"cliente28":"Bm62RtZ",
+"cliente29":"Cn71LpP",
+"cliente30":"Do46WqR",
+"cliente31":"Ep83QaX",
+"cliente32":"Fq69RtM",
+"cliente33":"Gr58LpV",
+"cliente34":"Hs92WqT",
+"cliente35":"It73QaP",
+"cliente36":"Ju61RtK",
+"cliente37":"Kv87LpR",
+"cliente38":"Lw52WqX",
+"cliente39":"Mx79QaM",
+"cliente40":"Ny64RtL",
+"cliente41":"Oz91LpZ",
+"cliente42":"Pa48WqT",
+"cliente43":"Qb76QaK",
+"cliente44":"Rc57RtM",
+"cliente45":"Sd83LpX",
+"cliente46":"Te69WqV",
+"cliente47":"Uf95QaP",
+"cliente48":"Vg54RtR",
+"cliente49":"Wh72LpQ",
+"cliente50":"Xi66WqM"
 
 };
 
+/* ===== LOGIN ===== */
+
+function fazerLogin(){
+
+let login = document.getElementById("login").value;
+let senha = document.getElementById("senha").value;
+
+if(usuarios[login] && usuarios[login] === senha){
+
+document.getElementById("loginBox").style.display="none";
+
+}else{
+
+document.getElementById("loginMsg").innerText="Login ou senha inválidos";
+
+}
+
+}
+
+/* ENTER LOGIN */
+
+document.getElementById("senha").addEventListener("keypress",function(e){
+
+if(e.key==="Enter"){
+
+fazerLogin();
+
+}
+
+});
+
 /* ===== SISTEMA ===== */
 
-let seq=[];
-let sinal=null;
-let gale=0;
+let greens=0
+let losses=0
+let brancos=0
 
-let greens=0;
-let losses=0;
-let brancos=0;
-let totalSinais=0;
-
-let textoSinal="";
-let possiveisBrancos=[];
-
-let limiteGreensTeste=5; // ALTERADO PARA 5
-
-/* resto do código continua exatamente igual */
+let limiteGreensTeste=5
 
 function add(c){
 
 if(greens>=limiteGreensTeste){
-result.innerHTML="<div class='green-chamativo'>✅ TESTE FINALIZADO - 5 GREENS</div>";
-return;
+
+document.getElementById("result").innerHTML="✅ TESTE FINALIZADO - 5 GREENS"
+return
+
 }
+
+if(c==="W"){
+
+greens++
+brancos++
+
+}else{
+
+greens++
+
+}
+
+document.getElementById("greens").innerText=greens
+document.getElementById("losses").innerText=losses
+document.getElementById("brancos").innerText=brancos
 
 }
 
 </script>
+
 </body>
 </html>
