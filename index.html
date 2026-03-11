@@ -9,33 +9,25 @@
 *{box-sizing:border-box}
 html,body{width:100%;height:100%;margin:0}
 body{background:#020617;font-family:Arial,sans-serif;color:#e5e7eb;overflow:hidden}
-canvas{position:fixed;inset:0;z-index:0}
-#statsText{position:fixed;top:5px;left:6px;font-size:10px;color:#00ff88;z-index:999;}
-#app{position:relative;z-index:1;max-width:420px;height:100vh;margin:auto;padding:6px;display:flex;flex-direction:column;gap:6px;text-align:center;}
-.titulo{font-size:20px;font-weight:900;color:#ff0033}
-.versao{font-size:13px;font-weight:900;color:#ff0033;margin-top:-4px}
-.blue-neon{text-shadow:0 0 6px #3b82f6}
-#hora{font-size:12px}
-#placar{display:flex;justify-content:space-between;font-size:11px;}
-.green-neon{color:#22c55e}
-.red-neon{color:#ef4444}
-.white-neon{color:#facc15}
-#linha{display:flex;gap:4px;overflow-x:auto;font-size:16px;padding:4px;}
-#linha::-webkit-scrollbar{display:none}
-#botoes{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;}
-button{padding:6px;font-size:11px;font-weight:bold;border:none;border-radius:8px;}
-.red{background:#7f1d1d;color:#fff}
-.black{background:#020617;color:#fff;border:1px solid #555}
-.white{background:#fff;color:#020617}
-#result{min-height:40px;font-size:13px;font-weight:bold;text-align:center;}
 
 #loginBox{
-position:fixed; inset:0; background:#020617;
-display:flex; flex-direction:column; justify-content:center;
-align-items:center; z-index:9999; gap:10px;
+position:fixed;inset:0;background:#020617;
+display:flex;flex-direction:column;justify-content:center;
+align-items:center;gap:10px;z-index:9999;
 }
-#loginBox input{padding:10px;border-radius:6px;border:none;width:220px;}
-#loginBox button{padding:10px;background:#22c55e;color:white;font-weight:bold;}
+
+#loginBox input{
+padding:10px;border-radius:6px;border:none;width:220px;
+}
+
+#loginBox button{
+padding:10px;background:#22c55e;color:white;font-weight:bold;
+}
+
+#app{display:none;padding:10px;text-align:center}
+
+#linha{display:flex;gap:5px;overflow-x:auto;font-size:18px;margin:10px 0}
+button{padding:8px;font-size:14px}
 </style>
 </head>
 
@@ -49,39 +41,32 @@ align-items:center; z-index:9999; gap:10px;
 <p id="loginMsg"></p>
 </div>
 
-<div id="statsText">Sinais: <span id="totalSinais">0</span> | Assert: <span id="percentual">0%</span></div>
-
-<canvas id="matrix"></canvas>
-
 <div id="app">
-<div>
-<div class="titulo">SISTEMA I.A</div>
-<div class="versao">V:9.60 MOBILE</div>
-<div id="hora">🕒 --:--:--</div>
-</div>
 
-<div id="placar">
-<span class="green-neon">GREEN <b id="greens">0</b></span>
-<span class="red-neon">LOSS <b id="losses">0</b></span>
-<span class="white-neon">BRANCO <b id="brancos">0</b></span>
+<h2>SISTEMA I.A</h2>
+
+<div>
+GREEN <b id="greens">0</b> |
+LOSS <b id="losses">0</b>
 </div>
 
 <div id="linha"></div>
 
-<div id="botoes">
-<button class="red" onclick="add('R')">🔴</button>
-<button class="black" onclick="add('B')">⚫</button>
-<button class="white" onclick="add('W')">⚪</button>
+<div>
+<button onclick="add('R')">🔴</button>
+<button onclick="add('B')">⚫</button>
+<button onclick="add('W')">⚪</button>
 </div>
 
 <div id="result">⏸️ AGUARDAR</div>
+
 </div>
 
 <script>
 
-/* ===== NOVOS 50 LOGINS ===== */
+/* ===== 50 NOVOS LOGINS ===== */
 
-const usuarios = {
+const usuarios={
 
 "cliente01":"Kp#73LmQ","cliente02":"Vr#52QaT","cliente03":"Hs#84RtL","cliente04":"Wx#61LpP","cliente05":"Df#79QaR",
 "cliente06":"Gb#48LmZ","cliente07":"Qt#92LpK","cliente08":"Rm#57RtM","cliente09":"Sz#63QaV","cliente10":"Ty#74LpX",
@@ -100,12 +85,13 @@ const usuarios = {
 
 function fazerLogin(){
 
-let l=document.getElementById("login").value;
-let s=document.getElementById("senha").value;
+let login=document.getElementById("login").value.trim();
+let senha=document.getElementById("senha").value.trim();
 
-if(usuarios[l] && usuarios[l]===s){
+if(usuarios[login] && usuarios[login]===senha){
 
 document.getElementById("loginBox").style.display="none";
+document.getElementById("app").style.display="block";
 
 }else{
 
@@ -115,14 +101,16 @@ document.getElementById("loginMsg").innerText="Login ou senha inválidos";
 
 }
 
-/* ENTER LOGIN */
+/* ENTER FUNCIONANDO */
 
-document.getElementById("login").addEventListener("keydown",function(e){
-if(e.key==="Enter") fazerLogin();
-});
+document.addEventListener("keydown",function(e){
 
-document.getElementById("senha").addEventListener("keydown",function(e){
-if(e.key==="Enter") fazerLogin();
+if(e.key==="Enter"){
+
+fazerLogin();
+
+}
+
 });
 
 /* ===== SISTEMA ===== */
@@ -130,8 +118,11 @@ if(e.key==="Enter") fazerLogin();
 const linha=document.getElementById("linha");
 const result=document.getElementById("result");
 
-let greens=0,losses=0,brancos=0;
-let sinal=null,gale=0;
+let greens=0;
+let losses=0;
+let sinal=null;
+let gale=0;
+
 let seq=[];
 
 let limiteGreensTeste=5;
@@ -149,14 +140,15 @@ return;
 
 seq.push(c);
 
-const el=document.createElement("span");
+let el=document.createElement("span");
+
 el.innerText=c==="R"?"🔴":c==="B"?"⚫":"⚪";
 
 linha.appendChild(el);
 
 linha.scrollLeft=linha.scrollWidth;
 
-sinal ? validar(c) : analisar();
+sinal?validar(c):analisar();
 
 }
 
@@ -164,7 +156,7 @@ sinal ? validar(c) : analisar();
 
 function analisar(){
 
-let ult5 = seq.slice(-5).join("");
+let ult5=seq.slice(-5).join("");
 
 const padroes=[
 
@@ -185,7 +177,7 @@ if(ult5===p.p){
 
 sinal=p.s;
 
-result.innerHTML="📡 SINAL I.A<br>Apostar "+(sinal==="R"?"🔴":"⚫")+"<br>G1";
+result.innerHTML="📡 SINAL<br>Apostar "+(sinal==="R"?"🔴":"⚫");
 
 return;
 
@@ -200,6 +192,8 @@ function validar(c){
 if(c===sinal){
 
 greens++;
+
+document.getElementById("greens").innerText=greens;
 
 result.innerHTML="🟢 GREEN";
 
@@ -217,6 +211,8 @@ result.innerHTML="♻️ GALE 1";
 
 losses++;
 
+document.getElementById("losses").innerText=losses;
+
 result.innerHTML="❌ LOSS";
 
 resetar();
@@ -232,9 +228,7 @@ function resetar(){
 setTimeout(()=>{
 
 sinal=null;
-
 gale=0;
-
 result.innerHTML="⏸️ AGUARDAR";
 
 },1200);
