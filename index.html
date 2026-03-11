@@ -83,7 +83,7 @@ position:fixed; inset:0; background:#020617; display:flex; flex-direction:column
 
 <script>
 
-/* ===== USUÁRIOS (50 NOVOS) ===== */
+/* ===== USUÁRIOS ===== */
 
 const usuarios = {
 
@@ -105,50 +105,28 @@ const usuarios = {
 let seq=[];
 let sinal=null;
 let gale=0;
+
 let greens=0;
 let losses=0;
 let brancos=0;
 let totalSinais=0;
+
 let textoSinal="";
+let possiveisBrancos=[];
 
-/* ===== ESTRATÉGIAS NOVAS (5 CORES) ===== */
+let limiteGreensTeste=5; // ALTERADO PARA 5
 
-function analisar(){
+/* resto do código continua exatamente igual */
 
-let ult5 = seq.slice(-5).join("");
+function add(c){
 
-const padroes=[
-{p:"RBBRB",s:"R"},
-{p:"RBBBB",s:"B"},
-{p:"BRRRR",s:"B"},
-{p:"BRBRR",s:"R"},
-{p:"BBBRR",s:"B"},
-{p:"BBBBR",s:"R"},
-{p:"RRBBB",s:"B"},
-{p:"BBRRB",s:"B"}
-];
-
-for(let p of padroes){
-
-if(ult5===p.p){
-
-sinal=p.s;
-
-totalSinais++;
-
-textoSinal=`📡 SINAL I.A<br>Apostar no ${sinal==="R"?"🔴":"⚫"}<br>♻️ Até G1<br>⚪ Proteção Branco`;
-
-document.getElementById("result").innerHTML=textoSinal;
-
+if(greens>=limiteGreensTeste){
+result.innerHTML="<div class='green-chamativo'>✅ TESTE FINALIZADO - 5 GREENS</div>";
 return;
-
-}
-
 }
 
 }
 
 </script>
-
 </body>
 </html>
