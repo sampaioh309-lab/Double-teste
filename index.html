@@ -76,11 +76,9 @@ BRANCO <b id="brancos">0</b>
 <div id="linha"></div>
 
 <div>
-
 <button onclick="add('R')">🔴</button>
 <button onclick="add('B')">⚫</button>
 <button onclick="add('W')">⚪</button>
-
 </div>
 
 <div id="result">⏸️ AGUARDAR</div>
@@ -165,16 +163,18 @@ document.getElementById("loginMsg").innerText="Login ou senha inválidos";
 
 }
 
-/* ENTER LOGIN */
+/* ===== ENTER FUNCIONANDO ===== */
 
-document.getElementById("senha").addEventListener("keypress",function(e){
-
+document.getElementById("login").addEventListener("keydown",function(e){
 if(e.key==="Enter"){
-
 fazerLogin();
-
 }
+});
 
+document.getElementById("senha").addEventListener("keydown",function(e){
+if(e.key==="Enter"){
+fazerLogin();
+}
 });
 
 /* ===== SISTEMA ===== */
