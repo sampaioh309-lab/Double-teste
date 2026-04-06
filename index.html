@@ -38,22 +38,9 @@ gap:6px;
 text-align:center
 }
 
-.titulo{
-font-size:20px;
-font-weight:900;
-color:#ff0033
-}
-
-.versao{
-font-size:13px;
-font-weight:900;
-color:#ff0033;
-margin-top:-4px
-}
-
-#hora{
-font-size:12px
-}
+.titulo{font-size:20px;font-weight:900;color:#ff0033}
+.versao{font-size:13px;font-weight:900;color:#ff0033;margin-top:-4px}
+#hora{font-size:12px}
 
 #placar{
 display:flex;
@@ -104,6 +91,7 @@ color:#00ff55;
 text-shadow:0 0 15px #00ff55,0 0 30px #00ff55,0 0 50px #00ff55
 }
 
+/* LOGIN */
 #loginBox{
 position:fixed;
 inset:0;
@@ -205,8 +193,21 @@ drops[i]++
 }
 setInterval(draw,33)
 
-/* LOGIN */
-const usuarios={"Henrique":"123456"}
+/* LOGIN COMPLETO */
+const usuarios={
+"Henrique":"123456",
+
+"cliente01":"Qa#84LmT","cliente02":"Zx#73WpR","cliente03":"Vr#92KdL","cliente04":"Mp#61QsA","cliente05":"Tf#58LzW",
+"cliente06":"Hx#74PaK","cliente07":"Rb#69QtM","cliente08":"Ds#83LmV","cliente09":"Pw#52QkX","cliente10":"Lt#94WrS",
+"cliente11":"Nz#47QaD","cliente12":"Kp#71LmZ","cliente13":"Bg#66RtH","cliente14":"Xq#53WpL","cliente15":"Sv#82QaT",
+"cliente16":"Jr#59LmP","cliente17":"Fy#64RtQ","cliente18":"Ck#75WpA","cliente19":"Ub#91QaM","cliente20":"He#48LmR",
+"cliente21":"Wt#83RtS","cliente22":"Dp#56WpZ","cliente23":"Ra#79QaL","cliente24":"Mk#62LmV","cliente25":"Gs#94RtX",
+"cliente26":"Zp#41WpQ","cliente27":"Tv#68QaB","cliente28":"Xr#73LmT","cliente29":"Pf#55RtA","cliente30":"Nb#82WpM",
+"cliente31":"Ly#64QaR","cliente32":"Cd#78LmS","cliente33":"Qv#93RtK","cliente34":"Hw#52WpL","cliente35":"Ek#69QaP",
+"cliente36":"Fp#47LmD","cliente37":"Bg#88RtT","cliente38":"Uz#63WpQ","cliente39":"Ir#71QaZ","cliente40":"Km#54LmX",
+"cliente41":"Xd#82RtR","cliente42":"Tv#66WpA","cliente43":"Jp#95QaS","cliente44":"Wq#43LmM","cliente45":"Sb#76RtL",
+"cliente46":"Rp#59WpK","cliente47":"Zf#72QaV","cliente48":"Hg#84LmA","cliente49":"Dr#61RtZ","cliente50":"Vx#90WpP"
+}
 
 function fazerLogin(){
 let l=document.getElementById("login").value
@@ -230,7 +231,6 @@ const brancosEl=document.getElementById("brancos")
 
 let greens=0, losses=0, brancos=0
 let seq=[], sinal=null, gale=0
-
 let janelaBranco=null
 
 function gerarJanelaBranco(){
@@ -263,7 +263,6 @@ linha.scrollLeft=linha.scrollWidth
 
 let agora=Date.now()
 
-/* ⚪ BRANCO POR HORÁRIO */
 if(c==="W" && janelaBranco && agora>=janelaBranco.inicio && agora<=janelaBranco.fim){
 greens++; brancos++
 greensEl.innerText=greens
@@ -275,16 +274,13 @@ janelaBranco=null
 return
 }
 
-/* VALIDAÇÃO */
 if(sinal){
 
 if(c==="W"){
 greens++; brancos++
 greensEl.innerText=greens
 brancosEl.innerText=brancos
-
 result.innerHTML="<div class='green-chamativo'>⚪🟢 GREEN</div>"
-
 sinal=null; gale=0
 return
 }
@@ -292,9 +288,7 @@ return
 if(c===sinal){
 greens++
 greensEl.innerText=greens
-
 result.innerHTML="<div class='green-chamativo'>🟢 GREEN</div>"
-
 sinal=null; gale=0
 return
 }
@@ -307,14 +301,10 @@ return
 
 losses++
 lossesEl.innerText=losses
-
 result.innerHTML="❌ LOSS"
-
 sinal=null; gale=0
 return
 }
-
-/* ESTRATÉGIA */
 
 if(seq.length<6){
 result.innerHTML="⏸️ AGUARDAR"
