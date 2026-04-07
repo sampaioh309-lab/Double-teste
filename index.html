@@ -3,36 +3,16 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SISTEMA I.A - Double Blaze</title>
+<title>SISTEMA I.A - Blaze</title>
 
 <style>
-*{box-sizing:border-box}
-html,body{margin:0;height:100%}
-
 body{
 background:#020617;
-color:#e5e7eb;
+color:white;
 font-family:Arial;
-overflow:hidden
+text-align:center;
+margin:0;
 }
-
-#app{
-max-width:420px;
-margin:auto;
-padding:10px;
-text-align:center
-}
-
-.titulo{color:#ff0033;font-weight:900}
-#placar{display:flex;justify-content:space-between;font-size:12px}
-
-#linha{display:flex;gap:4px;overflow-x:auto}
-
-button{padding:8px;border:none;border-radius:6px;font-weight:bold}
-
-.red{background:#7f1d1d;color:#fff}
-.black{background:#000;color:#fff}
-.white{background:#fff;color:#000}
 
 /* LOGIN */
 #loginBox{
@@ -43,21 +23,43 @@ display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
-z-index:9999;
-gap:10px
+gap:10px;
 }
 
+input,button{
+padding:10px;
+border:none;
+border-radius:6px;
+}
+
+button{
+background:#22c55e;
+color:white;
+font-weight:bold;
+}
+
+/* APP */
+#app{display:none;padding:10px;}
+
+#linha{
+display:flex;
+gap:5px;
+overflow:auto;
+margin:10px;
+}
+
+.green{color:#00ff55;font-size:28px;font-weight:bold}
+.red{color:#ff0033;font-size:28px;font-weight:bold}
+
 /* BLOQUEIO */
-#bloqueioTela{
+#bloqueio{
 display:none;
 position:fixed;
 inset:0;
 background:#020617;
-z-index:99999;
-flex-direction:column;
 justify-content:center;
 align-items:center;
-text-align:center;
+flex-direction:column;
 }
 </style>
 </head>
@@ -66,46 +68,48 @@ text-align:center;
 
 <!-- LOGIN -->
 <div id="loginBox">
+<h2>LOGIN</h2>
 <input id="login" placeholder="Login">
-<input id="senha" type="password" placeholder="Senha">
-<button onclick="fazerLogin()">Entrar</button>
-<p id="loginMsg"></p>
-</div>
-
-<!-- BLOQUEIO -->
-<div id="bloqueioTela">
-<h1 style="color:#00ff55;">✅ TESTE FINALIZADO</h1>
-<p>Fale com suporte</p>
-<button onclick="location.reload()">Reiniciar</button>
+<input id="senha" placeholder="Senha" type="password">
+<button onclick="logar()">Entrar</button>
+<p id="msg"></p>
 </div>
 
 <!-- APP -->
 <div id="app">
 
-<h2 class="titulo">SISTEMA I.A</h2>
+<h2>SISTEMA I.A</h2>
 
-<div id="placar">
-<span>GREEN <b id="greens">0</b></span>
-<span>LOSS <b id="losses">0</b></span>
-<span>BRANCO <b id="brancos">0</b></span>
+<div>
+GREEN: <span id="greens">0</span> |
+LOSS: <span id="losses">0</span> |
+BRANCO: <span id="brancos">0</span>
 </div>
 
 <div id="linha"></div>
 
 <div>
-<button class="red" onclick="add('R')">🔴</button>
-<button class="black" onclick="add('B')">⚫</button>
-<button class="white" onclick="add('W')">⚪</button>
+<button onclick="add('R')">🔴</button>
+<button onclick="add('B')">⚫</button>
+<button onclick="add('W')">⚪</button>
 </div>
 
 <div id="result">⏸️ AGUARDAR</div>
 
 </div>
 
+<!-- BLOQUEIO -->
+<div id="bloqueio">
+<h1 style="color:#00ff55">✅ TESTE FINALIZADO</h1>
+<p>Entre em contato com o suporte</p>
+<button onclick="location.reload()">Reiniciar</button>
+</div>
+
 <script>
 
-/* 🔐 LOGIN */
+/* 🔐 USUÁRIOS */
 const usuarios={
+
 "cliente01":"Ax#91LmQ","cliente02":"Bp#73RtZ","cliente03":"Cr#64WpX","cliente04":"Ds#85QaM","cliente05":"Et#52LmK",
 "cliente06":"Fu#94RtP","cliente07":"Gv#61WpD","cliente08":"Hw#78QaS","cliente09":"Ix#43LmR","cliente10":"Jy#82RtV",
 
@@ -120,114 +124,118 @@ const usuarios={
 
 "cliente41":"Od#66LmF","cliente42":"Pe#79RtD","cliente43":"Qf#51WpT","cliente44":"Rg#93QaH","cliente45":"Sh#62LmZ",
 "cliente46":"Ti#85RtK","cliente47":"Uj#48WpM","cliente48":"Vk#97QaE","cliente49":"Wl#74LmA","cliente50":"Xm#69RtC"
+
 };
 
-function fazerLogin(){
+/* LOGIN */
+function logar(){
 let l=document.getElementById("login").value.trim();
 let s=document.getElementById("senha").value.trim();
 
-if(!usuarios[l] || usuarios[l]!==s){
-document.getElementById("loginMsg").innerText="❌ Login inválido";
-return;
-}
-
+if(usuarios[l] && usuarios[l]===s){
 document.getElementById("loginBox").style.display="none";
+document.getElementById("app").style.display="block";
+}else{
+document.getElementById("msg").innerText="❌ Login inválido";
+}
 }
 
 /* SISTEMA */
 let greens=0, losses=0, brancos=0;
-let limiteGreens=5;
-let bloqueado=false;
+let limite=5;
 
 let seq=[], sinal=null, gale=0;
 
-/* GARANTE INÍCIO LIMPO */
-window.onload = () => {
-greens=0;
-losses=0;
-brancos=0;
-bloqueado=false;
-}
+/* ELEMENTOS */
+const greensEl=document.getElementById("greens");
+const lossesEl=document.getElementById("losses");
+const brancosEl=document.getElementById("brancos");
+const linha=document.getElementById("linha");
+const result=document.getElementById("result");
 
-/* FUNÇÃO PRINCIPAL */
-function add(c){
-
-if(bloqueado) return;
-
-/* BLOQUEIA SÓ NA HORA CERTA */
-if(seq.length > 0 && greens === limiteGreens){
-bloqueado=true;
+/* BLOQUEIO */
+function bloquear(){
 document.getElementById("app").style.display="none";
-document.getElementById("bloqueioTela").style.display="flex";
-return;
+document.getElementById("bloqueio").style.display="flex";
 }
 
-seq.push(c);
-
-const el=document.createElement("span");
-el.innerText=c==="R"?"🔴":c==="B"?"⚫":"⚪";
-document.getElementById("linha").appendChild(el);
-
-/* VALIDAÇÃO */
-if(sinal){
-
-if(c==="W"){
-greens++; brancos++;
-mostrar("⚪ GREEN");
-reset();
-return;
-}
-
-if(c===sinal){
-greens++;
-mostrar("🟢 GREEN");
-reset();
-return;
-}
-
-if(gale===0){
-gale=1;
-mostrar("♻️ G1");
-return;
-}
-
-losses++;
-mostrar("❌ LOSS");
-reset();
-return;
-}
-
-/* ENTRADA */
-if(seq.length>=6){
-let entrada=seq[seq.length-6];
-
-if(entrada!=="W"){
-sinal=entrada;
-mostrar("📡 Apostar "+(sinal==="R"?"🔴":"⚫"));
-}
-}
-
-atualizar();
-}
-
-/* FUNÇÕES */
-function mostrar(txt){
-document.getElementById("result").innerHTML=txt;
-}
-
-function reset(){
-sinal=null;
-gale=0;
-atualizar();
-}
-
+/* ATUALIZAR */
 function atualizar(){
 greensEl.innerText=greens;
 lossesEl.innerText=losses;
 brancosEl.innerText=brancos;
 }
 
+/* ADD RESULTADO */
+function add(c){
+
+/* adiciona histórico */
+seq.push(c);
+
+let el=document.createElement("span");
+el.innerText=c==="R"?"🔴":c==="B"?"⚫":"⚪";
+linha.appendChild(el);
+
+/* validação */
+if(sinal){
+
+if(c==="W"){
+greens++; brancos++;
+result.innerHTML="<div class='green'>⚪ GREEN</div>";
+reset();
+check();
+return;
+}
+
+if(c===sinal){
+greens++;
+result.innerHTML="<div class='green'>🟢 GREEN</div>";
+reset();
+check();
+return;
+}
+
+if(gale===0){
+gale=1;
+result.innerText="♻️ G1";
+return;
+}
+
+losses++;
+result.innerHTML="<div class='red'>❌ LOSS</div>";
+reset();
+return;
+}
+
+/* estratégia */
+if(seq.length>=6){
+
+let entrada = seq[seq.length-6];
+
+if(entrada!=="W" && !seq.slice(-3).includes("W")){
+sinal = entrada;
+result.innerHTML="📡 Entrar "+(sinal==="R"?"🔴":"⚫")+" + ⚪";
+}
+
+}
+
+}
+
+/* CHECK BLOQUEIO */
+function check(){
+if(greens === limite){
+setTimeout(bloquear, 800);
+}
+}
+
+/* RESET */
+function reset(){
+sinal=null;
+gale=0;
+atualizar();
+}
+
 </script>
 
 </body>
-  </html>
+</html>
