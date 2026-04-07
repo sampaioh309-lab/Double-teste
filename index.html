@@ -230,6 +230,7 @@ const brancosEl=document.getElementById("brancos")
 
 let greens=0, losses=0, brancos=0
 let limiteGreens=5
+let bloqueado=false
 
 let seq=[], sinal=null, gale=0
 let janelaBranco=null
@@ -255,9 +256,20 @@ fim:fim.getTime()
 
 function add(c){
 
+if(bloqueado) return;
+
 if(greens>=limiteGreens){
+
+bloqueado=true;
+
 result.innerHTML="<div class='green-chamativo'>✅ TESTE FINALIZADO - 5 GREENS</div>"
-return
+
+document.querySelectorAll("#botoes button").forEach(btn=>{
+btn.disabled=true
+btn.style.opacity="0.4"
+})
+
+return;
 }
 
 seq.push(c)
@@ -315,7 +327,7 @@ result.innerHTML="⏸️ AGUARDAR"
 return
 }
 
-let entrada = seq[seq.length-6]
+let entrada=seq[seq.length-6]
 
 if(seq.slice(-3).includes("W")){
 result.innerHTML="⚠️ Branco recente"
@@ -347,4 +359,4 @@ setInterval(atualizarHora,1000)
 </script>
 
 </body>
-</html>
+  </html>
