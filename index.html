@@ -205,11 +205,27 @@ const usuarios = {
 }
 
 function fazerLogin(){
-if(!usuarios[login.value] || usuarios[login.value]!==senha.value){
-loginMsg.innerText="Login inválido"
+
+let user = login.value
+let pass = senha.value
+
+if(!usuarios[user] || usuarios[user] !== pass){
+loginMsg.innerText = "Login inválido"
 return
 }
-loginBox.style.display="none"
+
+// 🔒 bloqueio por navegador
+let usado = localStorage.getItem("login_usado")
+
+if(usado){
+loginMsg.innerText = "⚠️ Este dispositivo já utilizou um login"
+return
+}
+
+localStorage.setItem("login_usado", user)
+
+loginBox.style.display = "none"
+
 }
 
 /* SISTEMA */
@@ -243,7 +259,6 @@ el.innerText=c==="R"?"🔴":c==="B"?"⚫":"⚪"
 linha.appendChild(el)
 linha.scrollLeft=linha.scrollWidth
 
-/* RESULTADO */
 if(sinal){
 
 if(c==="W"){
@@ -277,8 +292,6 @@ return
 
 }
 }
-
-/* ESTRATÉGIA */
 
 if(seq.length<6) return
 
