@@ -193,30 +193,35 @@ drops[i]++
 }
 setInterval(draw,33)
 
-/* LOGIN COMPLETO */
+/* LOGIN COM 50 USUÁRIOS */
 const usuarios={
-"Henrique":"123456",
 
-"cliente01":"Qa#84LmT","cliente02":"Zx#73WpR","cliente03":"Vr#92KdL","cliente04":"Mp#61QsA","cliente05":"Tf#58LzW",
-"cliente06":"Hx#74PaK","cliente07":"Rb#69QtM","cliente08":"Ds#83LmV","cliente09":"Pw#52QkX","cliente10":"Lt#94WrS",
-"cliente11":"Nz#47QaD","cliente12":"Kp#71LmZ","cliente13":"Bg#66RtH","cliente14":"Xq#53WpL","cliente15":"Sv#82QaT",
-"cliente16":"Jr#59LmP","cliente17":"Fy#64RtQ","cliente18":"Ck#75WpA","cliente19":"Ub#91QaM","cliente20":"He#48LmR",
-"cliente21":"Wt#83RtS","cliente22":"Dp#56WpZ","cliente23":"Ra#79QaL","cliente24":"Mk#62LmV","cliente25":"Gs#94RtX",
-"cliente26":"Zp#41WpQ","cliente27":"Tv#68QaB","cliente28":"Xr#73LmT","cliente29":"Pf#55RtA","cliente30":"Nb#82WpM",
-"cliente31":"Ly#64QaR","cliente32":"Cd#78LmS","cliente33":"Qv#93RtK","cliente34":"Hw#52WpL","cliente35":"Ek#69QaP",
-"cliente36":"Fp#47LmD","cliente37":"Bg#88RtT","cliente38":"Uz#63WpQ","cliente39":"Ir#71QaZ","cliente40":"Km#54LmX",
-"cliente41":"Xd#82RtR","cliente42":"Tv#66WpA","cliente43":"Jp#95QaS","cliente44":"Wq#43LmM","cliente45":"Sb#76RtL",
-"cliente46":"Rp#59WpK","cliente47":"Zf#72QaV","cliente48":"Hg#84LmA","cliente49":"Dr#61RtZ","cliente50":"Vx#90WpP"
+"cliente01":"Ax#91LmQ","cliente02":"Bp#73RtZ","cliente03":"Cr#64WpX","cliente04":"Ds#85QaM","cliente05":"Et#52LmK",
+"cliente06":"Fu#94RtP","cliente07":"Gv#61WpD","cliente08":"Hw#78QaS","cliente09":"Ix#43LmR","cliente10":"Jy#82RtV",
+
+"cliente11":"Kz#55WpB","cliente12":"La#97QaN","cliente13":"Mb#68LmT","cliente14":"Nc#74RtQ","cliente15":"Od#59WpF",
+"cliente16":"Pe#83QaL","cliente17":"Qf#62LmX","cliente18":"Rg#91RtM","cliente19":"Sh#47WpK","cliente20":"Ti#76QaD",
+
+"cliente21":"Uj#54LmP","cliente22":"Vk#89RtS","cliente23":"Wl#63WpZ","cliente24":"Xm#72QaA","cliente25":"Yn#95LmE",
+"cliente26":"Zo#58RtH","cliente27":"Ap#81WpJ","cliente28":"Bq#69QaU","cliente29":"Cr#44LmC","cliente30":"Ds#87RtY",
+
+"cliente31":"Et#53WpN","cliente32":"Fu#90QaR","cliente33":"Gv#71LmW","cliente34":"Hw#65RtO","cliente35":"Ix#92WpI",
+"cliente36":"Jy#60QaX","cliente37":"Kz#84LmS","cliente38":"La#57RtG","cliente39":"Mb#73WpV","cliente40":"Nc#88QaB",
+
+"cliente41":"Od#66LmF","cliente42":"Pe#79RtD","cliente43":"Qf#51WpT","cliente44":"Rg#93QaH","cliente45":"Sh#62LmZ",
+"cliente46":"Ti#85RtK","cliente47":"Uj#48WpM","cliente48":"Vk#97QaE","cliente49":"Wl#74LmA","cliente50":"Xm#69RtC"
+
 }
 
 function fazerLogin(){
-let l=document.getElementById("login").value
-let s=document.getElementById("senha").value
+let l=document.getElementById("login").value.trim()
+let s=document.getElementById("senha").value.trim()
 
 if(!usuarios[l] || usuarios[l]!==s){
-document.getElementById("loginMsg").innerText="Login ou senha inválidos"
+document.getElementById("loginMsg").innerText="❌ Login ou senha inválidos"
 return
 }
+
 document.getElementById("loginBox").style.display="none"
 }
 
@@ -267,9 +272,7 @@ if(c==="W" && janelaBranco && agora>=janelaBranco.inicio && agora<=janelaBranco.
 greens++; brancos++
 greensEl.innerText=greens
 brancosEl.innerText=brancos
-
 result.innerHTML="<div class='green-chamativo'>⚪ GREEN HORÁRIO</div>"
-
 janelaBranco=null
 return
 }
@@ -343,4 +346,4 @@ setInterval(atualizarHora,1000)
 </script>
 
 </body>
-  </html>
+</html>
