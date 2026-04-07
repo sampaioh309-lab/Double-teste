@@ -85,10 +85,10 @@ font-weight:bold
 }
 
 .green-chamativo{
-font-size:32px;
+font-size:28px;
 font-weight:900;
 color:#00ff55;
-text-shadow:0 0 15px #00ff55,0 0 30px #00ff55,0 0 50px #00ff55
+text-shadow:0 0 15px #00ff55,0 0 30px #00ff55
 }
 
 /* LOGIN */
@@ -193,24 +193,18 @@ drops[i]++
 }
 setInterval(draw,33)
 
-/* LOGIN COM 50 USUÁRIOS */
+/* LOGIN */
 const usuarios={
-
 "cliente01":"Ax#91LmQ","cliente02":"Bp#73RtZ","cliente03":"Cr#64WpX","cliente04":"Ds#85QaM","cliente05":"Et#52LmK",
 "cliente06":"Fu#94RtP","cliente07":"Gv#61WpD","cliente08":"Hw#78QaS","cliente09":"Ix#43LmR","cliente10":"Jy#82RtV",
-
 "cliente11":"Kz#55WpB","cliente12":"La#97QaN","cliente13":"Mb#68LmT","cliente14":"Nc#74RtQ","cliente15":"Od#59WpF",
 "cliente16":"Pe#83QaL","cliente17":"Qf#62LmX","cliente18":"Rg#91RtM","cliente19":"Sh#47WpK","cliente20":"Ti#76QaD",
-
 "cliente21":"Uj#54LmP","cliente22":"Vk#89RtS","cliente23":"Wl#63WpZ","cliente24":"Xm#72QaA","cliente25":"Yn#95LmE",
 "cliente26":"Zo#58RtH","cliente27":"Ap#81WpJ","cliente28":"Bq#69QaU","cliente29":"Cr#44LmC","cliente30":"Ds#87RtY",
-
 "cliente31":"Et#53WpN","cliente32":"Fu#90QaR","cliente33":"Gv#71LmW","cliente34":"Hw#65RtO","cliente35":"Ix#92WpI",
 "cliente36":"Jy#60QaX","cliente37":"Kz#84LmS","cliente38":"La#57RtG","cliente39":"Mb#73WpV","cliente40":"Nc#88QaB",
-
 "cliente41":"Od#66LmF","cliente42":"Pe#79RtD","cliente43":"Qf#51WpT","cliente44":"Rg#93QaH","cliente45":"Sh#62LmZ",
 "cliente46":"Ti#85RtK","cliente47":"Uj#48WpM","cliente48":"Vk#97QaE","cliente49":"Wl#74LmA","cliente50":"Xm#69RtC"
-
 }
 
 function fazerLogin(){
@@ -235,6 +229,8 @@ const lossesEl=document.getElementById("losses")
 const brancosEl=document.getElementById("brancos")
 
 let greens=0, losses=0, brancos=0
+let limiteGreens=5
+
 let seq=[], sinal=null, gale=0
 let janelaBranco=null
 
@@ -258,6 +254,11 @@ fim:fim.getTime()
 }
 
 function add(c){
+
+if(greens>=limiteGreens){
+result.innerHTML="<div class='green-chamativo'>✅ TESTE FINALIZADO - 5 GREENS</div>"
+return
+}
 
 seq.push(c)
 
