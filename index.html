@@ -54,16 +54,17 @@ position:fixed;
 inset:0;
 background:#020617;
 z-index:99999;
-display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+text-align:center;
 }
 </style>
 </head>
 
 <body>
 
+<!-- LOGIN -->
 <div id="loginBox">
 <input id="login" placeholder="Login">
 <input id="senha" type="password" placeholder="Senha">
@@ -71,12 +72,14 @@ align-items:center;
 <p id="loginMsg"></p>
 </div>
 
+<!-- BLOQUEIO -->
 <div id="bloqueioTela">
 <h1 style="color:#00ff55;">✅ TESTE FINALIZADO</h1>
 <p>Fale com suporte</p>
-<button onclick="abrirSuporte()">WhatsApp</button>
+<button onclick="location.reload()">Reiniciar</button>
 </div>
 
+<!-- APP -->
 <div id="app">
 
 <h2 class="titulo">SISTEMA I.A</h2>
@@ -101,9 +104,8 @@ align-items:center;
 
 <script>
 
-/* 🔐 50 USUÁRIOS */
+/* 🔐 LOGIN */
 const usuarios={
-
 "cliente01":"Ax#91LmQ","cliente02":"Bp#73RtZ","cliente03":"Cr#64WpX","cliente04":"Ds#85QaM","cliente05":"Et#52LmK",
 "cliente06":"Fu#94RtP","cliente07":"Gv#61WpD","cliente08":"Hw#78QaS","cliente09":"Ix#43LmR","cliente10":"Jy#82RtV",
 
@@ -118,7 +120,6 @@ const usuarios={
 
 "cliente41":"Od#66LmF","cliente42":"Pe#79RtD","cliente43":"Qf#51WpT","cliente44":"Rg#93QaH","cliente45":"Sh#62LmZ",
 "cliente46":"Ti#85RtK","cliente47":"Uj#48WpM","cliente48":"Vk#97QaE","cliente49":"Wl#74LmA","cliente50":"Xm#69RtC"
-
 };
 
 function fazerLogin(){
@@ -133,11 +134,6 @@ return;
 document.getElementById("loginBox").style.display="none";
 }
 
-/* SUPORTE */
-function abrirSuporte(){
-window.open("https://wa.me/5511999999999");
-}
-
 /* SISTEMA */
 let greens=0, losses=0, brancos=0;
 let limiteGreens=5;
@@ -145,11 +141,21 @@ let bloqueado=false;
 
 let seq=[], sinal=null, gale=0;
 
+/* GARANTE INÍCIO LIMPO */
+window.onload = () => {
+greens=0;
+losses=0;
+brancos=0;
+bloqueado=false;
+}
+
+/* FUNÇÃO PRINCIPAL */
 function add(c){
 
 if(bloqueado) return;
 
-if(greens>=limiteGreens){
+/* BLOQUEIA SÓ NA HORA CERTA */
+if(seq.length > 0 && greens === limiteGreens){
 bloqueado=true;
 document.getElementById("app").style.display="none";
 document.getElementById("bloqueioTela").style.display="flex";
@@ -162,31 +168,60 @@ const el=document.createElement("span");
 el.innerText=c==="R"?"🔴":c==="B"?"⚫":"⚪";
 document.getElementById("linha").appendChild(el);
 
+/* VALIDAÇÃO */
 if(sinal){
 
-if(c==="W"){greens++; brancos++; reset(); return;}
-if(c===sinal){greens++; reset(); return;}
-
-if(gale===0){gale=1; return;}
-
-losses++; reset(); return;
+if(c==="W"){
+greens++; brancos++;
+mostrar("⚪ GREEN");
+reset();
+return;
 }
 
+if(c===sinal){
+greens++;
+mostrar("🟢 GREEN");
+reset();
+return;
+}
+
+if(gale===0){
+gale=1;
+mostrar("♻️ G1");
+return;
+}
+
+losses++;
+mostrar("❌ LOSS");
+reset();
+return;
+}
+
+/* ENTRADA */
 if(seq.length>=6){
 let entrada=seq[seq.length-6];
-if(entrada!=="W"){sinal=entrada;}
+
+if(entrada!=="W"){
+sinal=entrada;
+mostrar("📡 Apostar "+(sinal==="R"?"🔴":"⚫"));
+}
 }
 
-update();
+atualizar();
+}
+
+/* FUNÇÕES */
+function mostrar(txt){
+document.getElementById("result").innerHTML=txt;
 }
 
 function reset(){
 sinal=null;
 gale=0;
-update();
+atualizar();
 }
 
-function update(){
+function atualizar(){
 greensEl.innerText=greens;
 lossesEl.innerText=losses;
 brancosEl.innerText=brancos;
@@ -195,4 +230,4 @@ brancosEl.innerText=brancos;
 </script>
 
 </body>
-</html>
+  </html>
