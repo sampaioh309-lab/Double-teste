@@ -192,16 +192,16 @@ setInterval(draw,33)
 
 /* LOGIN */
 const usuarios = {
-"cliente01":"Ax#91LmQ","cliente02":"Bp#73RtZ","cliente03":"Cr#64WpX","cliente04":"Ds#85QaM","cliente05":"Et#52LmK",
-"cliente06":"Fu#94RtP","cliente07":"Gv#61WpD","cliente08":"Hw#78QaS","cliente09":"Ix#43LmR","cliente10":"Jy#82RtV",
-"cliente11":"Kz#55WpB","cliente12":"La#97QaN","cliente13":"Mb#68LmT","cliente14":"Nc#74RtQ","cliente15":"Od#59WpF",
-"cliente16":"Pe#83QaL","cliente17":"Qf#62LmX","cliente18":"Rg#91RtM","cliente19":"Sh#47WpK","cliente20":"Ti#76QaD",
-"cliente21":"Uj#54LmP","cliente22":"Vk#89RtS","cliente23":"Wl#63WpZ","cliente24":"Xm#72QaA","cliente25":"Yn#95LmE",
-"cliente26":"Zo#58RtH","cliente27":"Ap#81WpJ","cliente28":"Bq#69QaU","cliente29":"Cr#44LmC","cliente30":"Ds#87RtY",
-"cliente31":"Et#53WpN","cliente32":"Fu#90QaR","cliente33":"Gv#71LmW","cliente34":"Hw#65RtO","cliente35":"Ix#92WpI",
-"cliente36":"Jy#60QaX","cliente37":"Kz#84LmS","cliente38":"La#57RtG","cliente39":"Mb#73WpV","cliente40":"Nc#88QaB",
-"cliente41":"Od#66LmF","cliente42":"Pe#79RtD","cliente43":"Qf#51WpT","cliente44":"Rg#93QaH","cliente45":"Sh#62LmZ",
-"cliente46":"Ti#85RtK","cliente47":"Uj#48WpM","cliente48":"Vk#97QaE","cliente49":"Wl#74LmA","cliente50":"Xm#69RtC"
+"cliente01":"Kx#92LmQ","cliente02":"Tr#47PdZ","cliente03":"Wp#83AxL","cliente04":"Bn#51QwM","cliente05":"Hy#74ZrK",
+"cliente06":"Ju#69LpT","cliente07":"Fo#28XcD","cliente08":"Re#95VaS","cliente09":"Ci#73NmR","cliente10":"Da#62YtV",
+"cliente11":"Mz#84KpB","cliente12":"Qa#57WxN","cliente13":"Lo#91EtT","cliente14":"Nx#36RuQ","cliente15":"Gi#78WpF",
+"cliente16":"Pe#45ZdL","cliente17":"Xo#88LmX","cliente18":"Ur#52QaM","cliente19":"Sw#97TpK","cliente20":"Af#61BdD",
+"cliente21":"Yh#34LsP","cliente22":"Vb#76RtS","cliente23":"Kd#29WpZ","cliente24":"Cm#85QaA","cliente25":"Tg#68LmE",
+"cliente26":"Zo#93HtH","cliente27":"Ap#55WqJ","cliente28":"Bx#72UaU","cliente29":"Cr#41LmC","cliente30":"Ds#89RtY",
+"cliente31":"Et#63WpN","cliente32":"Fu#96QaR","cliente33":"Gv#58LmW","cliente34":"Hw#27RtO","cliente35":"Ix#81WpI",
+"cliente36":"Jy#49QaX","cliente37":"Kz#94LmS","cliente38":"La#67RtG","cliente39":"Mb#32WpV","cliente40":"Nc#86QaB",
+"cliente41":"Od#59LmF","cliente42":"Pe#74RtD","cliente43":"Qf#21WpT","cliente44":"Rg#98QaH","cliente45":"Sh#65LmZ",
+"cliente46":"Ti#83RtK","cliente47":"Uj#46WpM","cliente48":"Vk#91QaE","cliente49":"Wl#38LmA","cliente50":"Xm#77RtC"
 }
 
 function fazerLogin(){
@@ -214,7 +214,6 @@ loginMsg.innerText = "Login inválido"
 return
 }
 
-// 🔒 bloqueio por navegador
 let usado = localStorage.getItem("login_usado")
 
 if(usado){
