@@ -214,20 +214,11 @@ loginMsg.innerText = "Login inválido"
 return
 }
 
-let usado = localStorage.getItem("login_usado")
-
-if(usado){
-loginMsg.innerText = "⚠️ Este dispositivo já utilizou um login"
-return
-}
-
-localStorage.setItem("login_usado", user)
-
 loginBox.style.display = "none"
 
 }
 
-/* SISTEMA */
+/* SISTEMA (SEM ALTERAÇÃO) */
 
 const greensEl = document.getElementById("greens")
 const lossesEl = document.getElementById("losses")
@@ -320,4 +311,4 @@ setInterval(atualizarHora,1000)
 </script>
 
 </body>
-</html>
+  </html>
