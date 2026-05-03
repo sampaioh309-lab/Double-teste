@@ -209,10 +209,19 @@ function fazerLogin(){
 let user = login.value
 let pass = senha.value
 
+// BLOQUEIO DE USO ÚNICO NO NAVEGADOR
+if(localStorage.getItem("user_usado_" + user)){
+loginMsg.innerText = "⚠️ Este login já foi utilizado neste navegador"
+return
+}
+
 if(!usuarios[user] || usuarios[user] !== pass){
 loginMsg.innerText = "Login inválido"
 return
 }
+
+// MARCA COMO USADO
+localStorage.setItem("user_usado_" + user, "true")
 
 loginBox.style.display = "none"
 
@@ -311,4 +320,4 @@ setInterval(atualizarHora,1000)
 </script>
 
 </body>
-  </html>
+</html>
